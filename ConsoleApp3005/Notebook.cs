@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
 
@@ -21,9 +19,6 @@ namespace ExamWork
                 
         public void MyWrite()       //запись в файл
         {
-
-
-
             using (StreamWriter sw = File.AppendText(dirName + @"\"+ fileN))
             {
                 sw.WriteLine(this.Name);
