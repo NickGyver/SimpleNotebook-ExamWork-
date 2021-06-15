@@ -4,34 +4,57 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ConsoleApp3005
+namespace ExamWork
 {
     class Program
     {
         static void Main(string[] args)
         {
-            string file_name = "Notebook.txt";
+            //string file_name = "Notebook.txt";
             string state = null;
 
-            Console.WriteLine("Введите путь каталога");
-            string dirName = Console.ReadLine();
-            DirectoryInfo dirInfo = new DirectoryInfo(dirName);
+            DriveInfo[] drives = DriveInfo.GetDrives();
+            foreach (DriveInfo drive in drives)
+            {
+                Console.WriteLine($"{drive.Name}");
+            }
+            Console.WriteLine("Введите путь каталога из выше перечисленных:");
+            Notebook dir = new Notebook();
+            Notebook.dirName = Console.ReadLine();
+            DirectoryInfo dirInfo = new DirectoryInfo(Notebook.dirName);
 
-            //Console.Clear();
-            if (System.IO.File.Exists(Convert.ToString(Path.GetFullPath(file_name))) == false)
-                Console.WriteLine("Не найден файл Notebook.txt, он будет создан");
-            while (state != "6")
+            Console.WriteLine("Хотите ли вы ввести новое имя файла? (y/n)");
+            string Q = Console.ReadLine(); 
+            if (Q == "y")
+            {
+                Console.WriteLine("Введите желаемое имя файла:");
+                Notebook fileN = new Notebook();
+                Notebook.fileN = Console.ReadLine();
+            }
+            else if (Q == "n")
+            {
+                Console.Clear();
+            }
+
+
+            //if (System.IO.File.Exists(Path.GetFullPath(Convert.ToString(Notebook.fileN))) == false)
+            //    Console.WriteLine("Не найден файл, он будет создан");
+
+            Console.Clear();
+
+            while (state != "7")
             {
                 try
-                {              
-                    Console.WriteLine("\n==== Текущая директория: ==== " + dirName + " ====\n" +
+                {              //главное меню
+                    Console.WriteLine("\n==== Текущая директория: ==== " + Notebook.dirName + " ====\n" +
                         "0 - очистка экрана\n" +
                         "1 - добавить новую запись\n" +
                         "2 - найти запись\n" +
-                        "3 - вывод Notebook.txt\n" +
-                        "4 -  инфо о каталоге\n" +
-                        "5 -  переход в каталог\n" +
-                        "6 -  выход");
+                        "3 - вывод файла записной книги\n" +
+                        "4 - инфо о каталоге\n" +
+                        "5 - переход в каталог\n" +
+                        "6 - Инфо о файле\n" +
+                        "7 - выход");
                     
                     state = Console.ReadLine();
                     switch (state)
@@ -41,18 +64,27 @@ namespace ConsoleApp3005
                             break;
 
                         case "1":       //Добавление записи
-                            Notebook temp = new Notebook();
-                            Console.WriteLine("Введите имя: ");
-                            temp.Name = Console.ReadLine();
-                            Console.WriteLine("Введите пол: ");
-                            temp.Gender = Console.ReadLine();
-                            Console.WriteLine("Введите номер телефона: ");
-                            temp.Phone = Console.ReadLine();
-                            Console.WriteLine("Введите адрес: ");
-                            temp.Adress = Console.ReadLine();
-                            Console.WriteLine("Введите дату рождения: ");
-                            temp.BirthDate = Console.ReadLine();
-                            temp.MyWrite();
+                            if (Notebook.fileN != null)
+                            {
+                                Console.WriteLine("Введите желаемое имя файла:");
+                                Notebook fileN = new Notebook();
+                                Notebook.fileN = Console.ReadLine();
+                            }
+                            else
+                            {
+                                Notebook temp = new Notebook();
+                                Console.WriteLine("Введите имя: ");
+                                temp.Name = Console.ReadLine();
+                                Console.WriteLine("Введите пол: ");
+                                temp.Gender = Console.ReadLine();
+                                Console.WriteLine("Введите номер телефона: ");
+                                temp.Phone = Console.ReadLine();
+                                Console.WriteLine("Введите адрес: ");
+                                temp.Adress = Console.ReadLine();
+                                Console.WriteLine("Введите дату рождения: ");
+                                temp.BirthDate = Console.ReadLine();
+                                temp.MyWrite();
+                            }
                             break;
 
                         case "2":       //Найти запись
@@ -63,21 +95,24 @@ namespace ConsoleApp3005
                             break;
 
                         case "3":       //Вывод всего файла
+                            Console.Clear();
+
                             Notebook.MyRead();
                             break;
 
                         case "4":       //Инфо о текущем каталоге
-                            if (Directory.Exists(dirName))
+                            Console.Clear();
+                            if (Directory.Exists(Notebook.dirName))
                             {
                                 Console.WriteLine("Подкаталоги:");
-                                string[] dirs = Directory.GetDirectories(dirName);
+                                string[] dirs = Directory.GetDirectories(Notebook.dirName);
                                 foreach (string s in dirs)
                                 {
                                     Console.WriteLine(s);
                                 }
                                 Console.WriteLine();
                                 Console.WriteLine("Файлы:");
-                                string[] files = Directory.GetFiles(dirName);
+                                string[] files = Directory.GetFiles(Notebook.dirName);
                                 foreach (string s in files)
                                 {
                                     Console.WriteLine(s);
@@ -86,26 +121,26 @@ namespace ConsoleApp3005
                             break;
 
                         case "5":       //Переход в каталог
-                            string filePath = "E:\\Новая папка\\Новая папка\\Новая папка";
-                            string directoryName;
-                            int i = 0;
 
-                            while (filePath != null)
-                            {
-                                //directoryName = Path.GetDirectoryName(filePath);
-                                //Console.WriteLine("GetDirectoryName('{0}') returns '{1}'",
-                                //    filePath, directoryName);
-                                //filePath = directoryName;
-                                //if (i == 1)
-                                //{
-                                //    filePath = directoryName + @"\";
-                                //}
-                                //i++;
-
-
-                            }
+                            Console.WriteLine("Введите новый путь каталога:");
+                            Notebook.dirName = Console.ReadLine();
+                            DirectoryInfo dirInfoLocal = new DirectoryInfo(Notebook.dirName);
+                            Console.Clear();
                             break;
+                        case "6": //инфо о файле
+                            
+                            Console.WriteLine("Введите название файла:");
+                            string fileName = Console.ReadLine();                           
+                            string path = Notebook.dirName + @"\" + /*"Notebook.txt"*/ fileName;
+                            FileInfo fileInf = new FileInfo(path);
+                            if (fileInf.Exists)
+                            {
+                                Console.WriteLine("Имя файла: {0}", fileInf.Name);
+                                Console.WriteLine("Время создания: {0}", fileInf.CreationTime);
+                                Console.WriteLine("Размер: {0}", fileInf.Length);
+                            }
 
+                            break;
                         default:        //дефолт
                             break;
                     }
@@ -114,11 +149,7 @@ namespace ConsoleApp3005
                 {
                     Console.WriteLine(e.Message);
                 }
-            }
-            Console.WriteLine("Нажмите любую клавишу для выхода ...");
-            Console.ReadLine();
+            } 
         }
     }
-
-
 }

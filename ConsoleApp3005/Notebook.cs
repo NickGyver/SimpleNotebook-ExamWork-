@@ -6,21 +6,25 @@ using System.Threading.Tasks;
 using System.IO;
 
 
-namespace ConsoleApp3005
+namespace ExamWork
 {
     public class Notebook
     {
-        private string dirName;
-
+        public static string fileN { get; set; }
+        public static string dirName { get; set; }
         public string Name { get; set; }
         public string Gender { get; set; }
         public string Phone { get; set; }
         public string Adress { get; set; }
         public string BirthDate { get; set; }
         public Notebook() { }
-        public void MyWrite()
+                
+        public void MyWrite()       //запись в файл
         {
-            using (StreamWriter sw = File.AppendText(dirName))
+
+
+
+            using (StreamWriter sw = File.AppendText(dirName + @"\"+ fileN))
             {
                 sw.WriteLine(this.Name);
                 sw.WriteLine(this.Gender);
@@ -29,9 +33,11 @@ namespace ConsoleApp3005
                 sw.WriteLine(this.BirthDate);
             }
         }
-        public static void MyRead()
+        public static void MyRead() //Читаем из файла
         {
-            using (StreamReader sr = File.OpenText("Notebook.txt"))
+            Console.WriteLine("Какой файл считать?:");
+            string fileOpen = Console.ReadLine();
+            using (StreamReader sr = File.OpenText(dirName + @"\" + fileOpen))
             {
 
                 while (sr.EndOfStream != true)
@@ -45,9 +51,11 @@ namespace ConsoleApp3005
                 }
             }
         }
-        public static void MySearch(string name)
+        public static void MySearch(string name)   //поиск по записям
         {
-            using (StreamReader sr = File.OpenText("Notebook.txt"))
+            Console.WriteLine("Какой файл считать?:");
+            string fileOpen = Console.ReadLine();
+            using (StreamReader sr = File.OpenText(dirName + @"\" + fileOpen))
             {
                 string temp = null;
                 while ((temp = sr.ReadLine()) != name && temp != null) ;
@@ -61,7 +69,7 @@ namespace ConsoleApp3005
                     Console.WriteLine("\n\n");
                 }
                 else
-                    Console.WriteLine("Такой человек не найден ...");
+                    Console.WriteLine("Такой человек не найден!");
             }
         }
 
